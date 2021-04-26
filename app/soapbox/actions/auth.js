@@ -6,6 +6,10 @@ import { fetchMeSuccess } from 'soapbox/actions/me';
 
 export const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT';
 
+export const APP_CREATE_REQUEST = 'APP_CREATE_REQUEST';
+export const APP_CREATE_SUCCESS = 'APP_CREATE_SUCCESS';
+export const APP_CREATE_FAIL    = 'APP_CREATE_FAIL';
+
 export const AUTH_APP_CREATED    = 'AUTH_APP_CREATED';
 export const AUTH_APP_AUTHORIZED = 'AUTH_APP_AUTHORIZED';
 export const AUTH_LOGGED_IN      = 'AUTH_LOGGED_IN';
@@ -43,7 +47,7 @@ const noOp = () => () => new Promise(f => f());
 
 function createAppAndToken() {
   return (dispatch, getState) => {
-    return dispatch(createApp()).then(() => {
+    return dispatch(createAuthApp()).then(() => {
       return dispatch(createAppToken());
     });
   };
@@ -54,14 +58,29 @@ const appName = () => {
   return `SoapboxFE_${timestamp}`; // TODO: Add commit hash
 };
 
-function createApp() {
+function createApp(params) {
   return (dispatch, getState) => {
-    return api(getState, 'app').post('/api/v1/apps', {
+    dispatch({ type: APP_CREATE_REQUEST, params });
+    return api(getState, 'app').post('/api/v1/apps', params).then(({ data: app }) => {
+      dispatch({ type: APP_CREATE_SUCCESS, params, app });
+      return app;
+    }).catch(error => {
+      dispatch({ type: APP_CREATE_FAIL, params, error });
+      throw error;
+    });
+  };
+}
+
+function createAuthApp() {
+  return (dispatch, getState) => {
+    const params = {
       client_name:   appName(),
       redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
       scopes:        'read write follow push admin',
-    }).then(response => {
-      return dispatch(authAppCreated(response.data));
+    };
+
+    return dispatch(createApp(params)).then(app => {
+      return dispatch(authAppCreated(app));
     });
   };
 }
