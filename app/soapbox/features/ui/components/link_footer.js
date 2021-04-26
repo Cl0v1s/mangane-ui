@@ -40,6 +40,7 @@ const LinkFooter = ({ onOpenHotkeys, account, onClickLogOut }) => (
           <li><Link to='/soapbox/config'><FormattedMessage id='navigation_bar.soapbox_config' defaultMessage='Soapbox config' /></Link></li>
         </>}
         <li><Link to='/settings/import'><FormattedMessage id='navigation_bar.import_data' defaultMessage='Import data' /></Link></li>
+        <li><Link to='/development'><FormattedMessage id='navigation_bar.developers' defaultMessage='Developers' /></Link></li>
         <li><a href='#' onClick={onOpenHotkeys}><FormattedMessage id='navigation_bar.keyboard_shortcuts' defaultMessage='Hotkeys' /></a></li>
       </>}
       <li><Link to='/about'><FormattedMessage id='navigation_bar.info' defaultMessage='About this server' /></Link></li>

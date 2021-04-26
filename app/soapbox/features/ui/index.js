@@ -93,6 +93,7 @@ import {
   AwaitingApproval,
   Reports,
   ModerationLog,
+  Development,
 } from './util/async-components';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
@@ -279,6 +280,7 @@ class SwitchingColumnsArea extends React.PureComponent {
         <WrappedRoute path='/settings/profile' layout={LAYOUT.DEFAULT} component={EditProfile} content={children} />
         <WrappedRoute path='/settings/import' layout={LAYOUT.DEFAULT} component={ImportData} content={children} />
         <WrappedRoute path='/backups' layout={LAYOUT.DEFAULT} component={Backups} content={children} />
+        <WrappedRoute path='/development' layout={LAYOUT.DEFAULT} component={Development} content={children} />
         <WrappedRoute path='/soapbox/config' layout={LAYOUT.DEFAULT} component={SoapboxConfig} content={children} />
 
         <Redirect from='/admin/dashboard' to='/admin' exact />
